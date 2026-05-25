@@ -30,26 +30,17 @@ export async function POST(req: Request) {
     });
 
     // STORYBOARD IMAGES
-    const scenePrompts = [
-      `Opening cinematic scene of ${prompt}`,
-      `Middle intense cinematic scene of ${prompt}`,
-      `Final dramatic cinematic scene of ${prompt}`,
-    ];
-
-    const images: string[] = [];
-
-    for (const scene of scenePrompts) {
-
-      const image = await openai.images.generate({
-        model: "gpt-image-1",
-        prompt: scene,
-        size: "1024x1024",
-      });
-
-      const base64 = image.data?.[0]?.b64_json;
-
-if (!base64) continue;
-
+    const image = await openai.images.generate({
+      model: "gpt-image-1",
+      prompt: `Ultra cinematic movie scene of ${prompt}`,
+      size: "auto",
+    });
+    
+    const base64 = image.data?.[0]?.b64_json;
+    
+    const images = [];
+    
+    if (base64) {
       images.push(
         `data:image/png;base64,${base64}`
       );
