@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import OpenAI from "openai";
+import { supabase } from "@/lib/supabase";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -11,7 +12,10 @@ export async function POST(req: Request) {
   try {
 
     const body = await req.json();
-    const { prompt } = body;
+    const { prompt, userEmail } = body;
+    const safePrompt = prompt
+  .replace(/kill|murder|blood|gun|weapon|drug|mafia|violence/gi, "cinematic")
+  .trim();
 
     // TEXT GENERATION
     const completion = await openai.chat.completions.create({
@@ -24,7 +28,7 @@ export async function POST(req: Request) {
         },
         {
           role: "user",
-          content: `Create a cinematic short video idea about: ${prompt}`,
+          content: `Create a cinematic short video idea about: ${safePrompt}`,
         },
       ],
     });
@@ -32,7 +36,7 @@ export async function POST(req: Request) {
     // STORYBOARD IMAGES
     const image = await openai.images.generate({
       model: "gpt-image-1",
-      prompt: `Ultra cinematic movie scene of ${prompt}`,
+      prompt: `Ultra cinematic dramatic movie scene, professional lighting, emotional storytelling, no violence, inspired by Hollywood style: ${safePrompt}`,
       size: "auto",
     });
     
@@ -46,10 +50,28 @@ export async function POST(req: Request) {
       );
     }
 
-    return Response.json({
-      result: completion.choices[0].message.content,
-      images: images,
-    });
+    const script = completion.choices[0].message.content;
+
+
+  const { data, error } = await supabase
+  .from("generations")
+  .insert([
+    {
+      user_email: userEmail || "guest",
+      prompt: prompt,
+      script: script,
+      image: images[0] || "",
+    },
+  ]);
+
+console.log("SUPABASE DATA:", data);
+console.log("SUPABASE ERROR:", error);
+
+
+return Response.json({
+  result: script,
+  images: images,
+});
 
   } catch (error: any) {
 
