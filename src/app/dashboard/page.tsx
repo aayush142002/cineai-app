@@ -12,13 +12,12 @@ const { data, error } = await supabase
 .select("*")
 .order("created_at", { ascending: false });
 
-```
 if (data) {
   setGenerations(data);
 }
 
 console.log(error);
-```
+
 
 }
 
@@ -28,7 +27,7 @@ loadGenerations();
 
 return ( <main className="min-h-screen bg-black text-white">
 
-```
+
   <div className="max-w-7xl mx-auto px-6 py-12">
 
     <h1 className="text-5xl font-black mb-10">
