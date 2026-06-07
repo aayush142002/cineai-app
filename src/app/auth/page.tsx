@@ -16,9 +16,23 @@ export default function AuthPage() {
     });
 
     if (error) {
+
       alert(error.message);
+    
     } else {
-      alert("Signup successful! Check your email.");
+      const { data, error: insertError } = await supabase
+  .from("users")
+  .insert([
+    {
+      email: email,
+    },
+  ]);
+
+console.log("USER INSERT:", data);
+console.log("USER INSERT ERROR:", insertError);
+    
+           window.location.href = "/studio";
+    
     }
   }
 
@@ -28,11 +42,15 @@ export default function AuthPage() {
       email,
       password,
     });
-
+  
     if (error) {
+  
       alert(error.message);
+  
     } else {
-      alert("Login successful!");
+  
+      window.location.href = "/studio";
+  
     }
   }
 
