@@ -2,7 +2,7 @@
 
 export default function PricingPage() {
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen text-white">
 
       <div className="max-w-7xl mx-auto px-6 py-20">
 

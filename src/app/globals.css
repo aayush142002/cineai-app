@@ -1,26 +1,74 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #081120;
+  --foreground: #ffffff;
+
+  --card: #101a2e;
+  --card-border: rgba(0, 229, 255, 0.15);
+
+  --primary: #00e5ff;
+  --primary-hover: #00b8d9;
+
+  --secondary: #7c3aed;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(0, 229, 255, 0.08),
+      transparent 40%
+    ),
+    #081120;
+
+  color: var(--foreground);
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  min-height: 100vh;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.glow-text {
+  text-shadow:
+    0 0 10px rgba(0, 229, 255, 0.6),
+    0 0 20px rgba(0, 229, 255, 0.3);
+}
+
+.glass-card {
+  background: rgba(16, 26, 46, 0.7);
+  backdrop-filter: blur(16px);
+
+  border: 1px solid rgba(0, 229, 255, 0.15);
+
+  border-radius: 24px;
+}
+
+.primary-button {
+  background: linear-gradient(
+    135deg,
+    #00e5ff,
+    #00b8d9
+  );
+
+  color: #081120;
+
+  font-weight: 700;
+
+  transition: all 0.25s ease;
+}
+
+.primary-button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 0 20px rgba(0, 229, 255, 0.4);
 }

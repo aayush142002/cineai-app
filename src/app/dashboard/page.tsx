@@ -25,7 +25,7 @@ useEffect(() => {
 loadGenerations();
 }, []);
 
-return ( <main className="min-h-screen bg-black text-white">
+return ( <main className="min-h-screen text-white">
 
 
   <div className="max-w-7xl mx-auto px-6 py-12">

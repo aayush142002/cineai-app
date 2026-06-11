@@ -8,6 +8,9 @@ export default function StudioPage() {
 
   const [prompt, setPrompt] = useState("");
   const [result, setResult] = useState("");
+  const [imageSize, setImageSize] = useState("1:1");
+  const [imageCount, setImageCount] =
+  useState(1);
   const [video, setVideo] = useState("");
 const [videoLoading, setVideoLoading] = useState(false);
   const [images, setImages] = useState<any[]>([]);
@@ -23,12 +26,21 @@ const [videoLoading, setVideoLoading] = useState(false);
   useState(0);
 
   async function generateStory() {
-    if (credits < 3) {
+    const requiredCredits =
+  imageCount === 1
+    ? 3
+    : imageCount === 2
+    ? 5
+    : 8;
+
+if (credits < requiredCredits) {
 
       alert(`
         You're out of credits.
         
-        ✨ Story + Image = 3 Credits
+        1 Image = 3 Credits
+2 Images = 5 Credits
+4 Images = 8 Credits
         🎥 AI Video = 5 Credits
         
         Buy more credits to continue creating cinematic content.
@@ -45,10 +57,12 @@ const [videoLoading, setVideoLoading] = useState(false);
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-  prompt,
-  userEmail: user?.email || "guest@example.com",
-  userId: user?.id || null,
-}),
+        prompt,
+        imageSize,
+        imageCount,
+        userEmail: user?.email || "guest@example.com",
+        userId: user?.id || null,
+      })
     });
 
     const data = await response.json();
@@ -56,7 +70,8 @@ const [videoLoading, setVideoLoading] = useState(false);
     setResult(data.result);
     setImages(data.images || []);
 
-    const newCredits = credits - 3;
+    const newCredits =
+  credits - requiredCredits;
 
 setCredits(newCredits);
 
@@ -175,7 +190,7 @@ setProfile(profileData);
 
   if (checkingAuth) {
   return (
-    <main className="min-h-screen bg-black text-white flex items-center justify-center">
+    <main className="min-h-screen text-white flex items-center justify-center">
       Loading...
     </main>
   );
@@ -205,7 +220,7 @@ async function loadNotificationCount() {
 
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-black text-white">
+    <main className="relative min-h-screen overflow-hidden text-white">
     {/* Background Glow */}
 
 <div className="absolute inset-0 overflow-hidden">
@@ -218,413 +233,20 @@ async function loadNotificationCount() {
 
 </div>
 <div className="relative z-10 px-6 md:px-12 py-10">
-{/* HERO SECTION */}
-
-<motion.div
-  initial={{ opacity: 0, y: 60 }}
-  animate={{
-    opacity: 1,
-    y: 0,
-  }}
-  transition={{
-    duration: 1.2,
-    ease: "easeOut",
-  }}
-  className="max-w-7xl mx-auto text-center pt-10 md:pt-20 pb-20"
->
-
-  <div className="inline-flex items-center gap-2 border border-white/10 bg-white/5 backdrop-blur-xl rounded-full px-5 py-2 text-sm text-zinc-300 mb-8">
-    ✨ Next Generation AI Filmmaking Platform
-  </div>
-
-  <motion.h1
-  animate={{
-    y: [0, -10, 0],
-  }}
-  transition={{
-    duration: 4,
-    repeat: Infinity,
-    ease: "easeInOut",
-  }}
-  className="text-5xl md:text-8xl font-black tracking-tight leading-[1.05] max-w-6xl mx-auto"
->
-
-    Create
-
-    <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent">
-      {" "}Cinematic AI{" "}
-    </span>
-
-    Stories
-
-    </motion.h1>
-
-  <p className="text-zinc-400 text-lg md:text-2xl max-w-3xl mx-auto mt-8 leading-relaxed">
-
-    Generate ultra realistic AI movie scenes,
-    cinematic scripts, futuristic storyboards
-    and visually stunning film concepts instantly.
-
-  </p>
-
-  <div className="flex flex-col md:flex-row justify-center gap-4 mt-12">
-
-  <button
-  onClick={() => {
-    window.location.href = "/auth";
-  }}
-  className="bg-white text-black px-8 py-4 rounded-2xl font-bold text-lg hover:scale-105 transition"
->
-  Start Creating
-</button>
-
-    <button className="border border-white/10 bg-white/5 backdrop-blur-xl px-8 py-4 rounded-2xl text-lg hover:bg-white/10 transition">
-      Watch Demo
-    </button>
-
-  </div>
-
-  </motion.div>
-
-{/* FEATURES */}
-
-{/* FEATURES */}
-
-<div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
-
-  <motion.div
-    initial={{ opacity: 0, y: 40 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    whileHover={{
-      scale: 1.08,
-      rotateX: 6,
-      rotateY: 6,
-    }}
-    transition={{
-      duration: 0.5,
-      type: "spring",
-    }}
-    viewport={{ once: true }}
-    className="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-xl hover:border-purple-500/50 transition duration-500"
-  >
-
-    <div className="text-5xl mb-6">🎬</div>
-
-    <h3 className="text-2xl font-bold mb-4">
-      AI Storytelling
-    </h3>
-
-    <p className="text-zinc-400 leading-relaxed">
-      Generate cinematic scripts, emotional narratives and futuristic movie concepts instantly.
-    </p>
-
-  </motion.div>
-
-  <motion.div
-    initial={{ opacity: 0, y: 40 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    whileHover={{
-      scale: 1.08,
-      rotateX: 6,
-      rotateY: 6,
-    }}
-    transition={{
-      duration: 0.5,
-      type: "spring",
-      delay: 0.1,
-    }}
-    viewport={{ once: true }}
-    className="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-xl hover:border-blue-500/50 transition duration-500"
-  >
-
-    <div className="text-5xl mb-6">🖼️</div>
-
-    <h3 className="text-2xl font-bold mb-4">
-      AI Visuals
-    </h3>
-
-    <p className="text-zinc-400 leading-relaxed">
-      Create ultra realistic cinematic AI scenes with movie-style composition and lighting.
-    </p>
-
-  </motion.div>
-
-  <motion.div
-    initial={{ opacity: 0, y: 40 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    whileHover={{
-      scale: 1.08,
-      rotateX: 6,
-      rotateY: 6,
-    }}
-    transition={{
-      duration: 0.5,
-      type: "spring",
-      delay: 0.2,
-    }}
-    viewport={{ once: true }}
-    className="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-xl hover:border-pink-500/50 transition duration-500"
-  >
-
-    <div className="text-5xl mb-6">⚡</div>
-
-    <h3 className="text-2xl font-bold mb-4">
-      Instant Creation
-    </h3>
-
-    <p className="text-zinc-400 leading-relaxed">
-      Generate high-quality cinematic concepts in seconds with next-generation AI automation.
-    </p>
-
-  </motion.div>
-
-</div>
-
-{/* STATS */}
-
-<div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 mb-24">
-
-  <div className="bg-white/5 border border-white/10 rounded-3xl p-8 text-center backdrop-blur-xl">
-
-    <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-      10K+
-    </h2>
-
-    <p className="text-zinc-400 mt-4">
-      Generations
-    </p>
-
-  </div>
-
-  <div className="bg-white/5 border border-white/10 rounded-3xl p-8 text-center backdrop-blur-xl">
-
-    <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
-      2K+
-    </h2>
-
-    <p className="text-zinc-400 mt-4">
-      Creators
-    </p>
-
-  </div>
-
-  <div className="bg-white/5 border border-white/10 rounded-3xl p-8 text-center backdrop-blur-xl">
-
-    <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-      4.9★
-    </h2>
-
-    <p className="text-zinc-400 mt-4">
-      User Rating
-    </p>
-
-  </div>
-
-  <div className="bg-white/5 border border-white/10 rounded-3xl p-8 text-center backdrop-blur-xl">
-
-    <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
-      24/7
-    </h2>
-
-    <p className="text-zinc-400 mt-4">
-      AI Creation
-    </p>
-
-  </div>
-
-</div>
-
-{/* TESTIMONIALS */}
-
-<div className="max-w-7xl mx-auto mb-24">
-
-  <div className="text-center mb-14">
-
-    <h2 className="text-4xl md:text-6xl font-black mb-6">
-      Loved by Creators
-    </h2>
-
-    <p className="text-zinc-400 text-xl">
-      Filmmakers, storytellers and AI creators use CineAI daily.
-    </p>
-
-  </div>
-
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-    <div className="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-xl hover:scale-[1.03] transition duration-500">
-
-      <p className="text-zinc-300 text-lg leading-relaxed mb-8">
-        “CineAI completely transformed how I create cinematic concepts for my short films.”
-      </p>
-
-      <div>
-        <h3 className="font-bold text-xl">
-          Alex Carter
-        </h3>
-
-        <p className="text-zinc-500">
-          Film Director
-        </p>
-      </div>
-
-    </div>
-
-    <div className="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-xl hover:scale-[1.03] transition duration-500">
-
-      <p className="text-zinc-300 text-lg leading-relaxed mb-8">
-        “The AI visuals feel insanely futuristic. It’s like having a Hollywood concept artist.”
-      </p>
-
-      <div>
-        <h3 className="font-bold text-xl">
-          Sarah Lee
-        </h3>
-
-        <p className="text-zinc-500">
-          Content Creator
-        </p>
-      </div>
-
-    </div>
-
-    <div className="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-xl hover:scale-[1.03] transition duration-500">
-
-      <p className="text-zinc-300 text-lg leading-relaxed mb-8">
-        “The cinematic storytelling workflow is faster than anything I’ve used before.”
-      </p>
-
-      <div>
-        <h3 className="font-bold text-xl">
-          Daniel Cruz
-        </h3>
-
-        <p className="text-zinc-500">
-          AI Filmmaker
-        </p>
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-
-{/* PRICING */}
-
-<div className="max-w-7xl mx-auto mb-24">
-
-  <div className="text-center mb-16">
-
-    <h2 className="text-4xl md:text-6xl font-black mb-6">
-      Simple Pricing
-    </h2>
-
-    <p className="text-zinc-400 text-xl">
-      Start creating for free. Upgrade when you’re ready.
-    </p>
-
-  </div>
-
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-
-    {/* FREE PLAN */}
-
-    <div className="bg-white/5 border border-white/10 rounded-[32px] p-10 backdrop-blur-xl">
-
-      <h3 className="text-3xl font-black mb-4">
-        Free
-      </h3>
-
-      <p className="text-zinc-400 mb-8">
-        Perfect for exploring cinematic AI creation.
-      </p>
-
-      <h2 className="text-6xl font-black mb-10">
-        $0
-      </h2>
-
-      <div className="space-y-4 text-zinc-300">
-
-        <p>✓ 5 Free Credits</p>
-
-        <p>✓ AI Story Generation</p>
-
-        <p>✓ AI Image Generation</p>
-
-        <p>✓ Public Share Links</p>
-
-      </div>
-
-      <button className="w-full mt-10 border border-white/10 bg-white/5 py-4 rounded-2xl">
-        Current Plan
-      </button>
-
-    </div>
-
-    {/* PRO PLAN */}
-
-    <div className="relative bg-gradient-to-br from-purple-500/20 to-blue-500/20 border border-purple-500/30 rounded-[32px] p-10 backdrop-blur-xl overflow-hidden">
-
-      <div className="absolute top-4 right-4 bg-purple-500 text-white px-4 py-1 rounded-full text-sm font-bold">
-        MOST POPULAR
-      </div>
-
-      <h3 className="text-3xl font-black mb-4">
-        Pro
-      </h3>
-
-      <p className="text-zinc-300 mb-8">
-        Built for creators, filmmakers and AI storytellers.
-      </p>
-
-      <h2 className="text-6xl font-black mb-10">
-        $19
-        <span className="text-2xl text-zinc-400">
-          /mo
-        </span>
-      </h2>
-
-      <div className="space-y-4 text-zinc-200">
-
-        <p>✓ Unlimited Generations</p>
-
-        <p>✓ Premium AI Visuals</p>
-
-        <p>✓ AI Video Generation (Coming Soon)</p>
-
-        <p>✓ Priority Rendering</p>
-
-        <p>✓ Early Access Features</p>
-
-      </div>
-
-      <button className="w-full mt-10 bg-gradient-to-r from-purple-500 to-blue-500 py-4 rounded-2xl font-bold hover:scale-[1.02] transition">
-        Upgrade to Pro
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-<div className="max-w-6xl mx-auto bg-white/5 border border-white/10 backdrop-blur-2xl rounded-[32px] p-6 md:p-10 shadow-2xl">
-
         {/* HERO */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
 
   <div>
 
-    <h1 className="text-4xl md:text-7xl font-bold tracking-tight">
-      CineAI
-    </h1>
+  <h1 className="text-5xl md:text-7xl font-black tracking-tight">
+  Create Your Next Cinematic World
+</h1>
 
-    <p className="text-zinc-400 text-xl mt-4">
-      {user?.email || "Guest User"}
-    </p>
+<p className="text-zinc-400 text-xl mt-4">
+  AI Story & Visual Generation Studio
+</p>
     <p className="text-yellow-400 mt-2">
-  Credits: {credits}
+    ⚡ Available Credits: {credits}
 </p>
 
 {credits <= 0 && (
@@ -745,9 +367,71 @@ async function loadNotificationCount() {
 
           <div className="flex flex-col md:flex-row gap-4">
 
+          <select
+  value={imageSize}
+  onChange={(e) =>
+    setImageSize(e.target.value)
+  }
+  className="
+    bg-[#101A2E]
+    border
+    border-cyan-500/20
+    rounded-2xl
+    px-4
+    py-5
+    text-white
+    font-medium
+    outline-none
+    focus:border-cyan-400
+    focus:ring-2
+    focus:ring-cyan-500/20
+    backdrop-blur-xl
+  "
+>
+  <option value="1:1">
+    Square
+  </option>
+
+  <option value="9:16">
+    Mobile Reel
+  </option>
+
+  <option value="16:9">
+    Cinematic Wide
+  </option>
+</select>
+
+<select
+  value={imageCount}
+  onChange={(e) =>
+    setImageCount(Number(e.target.value))
+  }
+  className="
+    bg-[#101A2E]
+    border
+    border-cyan-500/20
+    rounded-2xl
+    px-4
+    py-5
+    text-white
+  "
+>
+  <option value={1}>
+    1 Image
+  </option>
+
+  <option value={2}>
+    2 Images
+  </option>
+
+  <option value={4}>
+    4 Images
+  </option>
+</select>
+
             <input
               type="text"
-              placeholder="Enter your cinematic story idea..."
+              placeholder="Describe a cinematic scene, character, world or story..."
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               className="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-5 text-lg outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/30 transition backdrop-blur-xl"
@@ -758,7 +442,7 @@ async function loadNotificationCount() {
               disabled={loading}
               className="bg-gradient-to-r from-purple-500 to-blue-500 px-8 py-5 rounded-2xl font-bold text-lg hover:scale-105 hover:shadow-[0_0_40px_rgba(168,85,247,0.5)] transition disabled:opacity-50"
             >
-              {loading ? "Generating..." : "Generate"}
+              {loading ? "Creating..." : "✨ Create Story"}
             </button>
             <button
   onClick={generateVideo}
@@ -766,8 +450,8 @@ async function loadNotificationCount() {
   className="bg-gradient-to-r from-pink-500 to-purple-500 px-8 py-5 rounded-2xl font-bold text-lg hover:scale-105 transition disabled:opacity-50"
 >
   {videoLoading
-    ? "Generating Video..."
-    : "Generate Video"}
+    ? "Creating Video..."
+    : "🎥 Create Video"}
 </button>
 
           </div>
@@ -1009,7 +693,6 @@ async function loadNotificationCount() {
 
 </div>
 
-      </div> 
 
     </main>
   );

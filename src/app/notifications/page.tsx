@@ -72,7 +72,7 @@ export default function NotificationsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-black text-white p-10">
+    <main className="min-h-screen text-white p-10">
       <h1 className="text-5xl font-black mb-10">
         🔔 Notifications
       </h1>

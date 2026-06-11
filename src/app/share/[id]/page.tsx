@@ -21,7 +21,7 @@ export default async function SharePage({
 
   if (!data) {
     return (
-      <main className="min-h-screen bg-black text-white flex items-center justify-center">
+      <main className="min-h-screen text-white flex items-center justify-center">
         <h1 className="text-4xl font-bold">
           Generation not found
         </h1>
@@ -30,7 +30,7 @@ export default async function SharePage({
   }
 
   return (
-    <main className="min-h-screen bg-black text-white p-10">
+    <main className="min-h-screen text-white p-10">
 
       <div className="max-w-4xl mx-auto">
 

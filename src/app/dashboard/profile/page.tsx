@@ -110,7 +110,7 @@ if (existingProfile) {
   }, []);
 
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screentext-white">
       <div className="max-w-3xl mx-auto px-6 py-16">
 
         <h1 className="text-5xl font-black mb-10">

@@ -14,7 +14,24 @@ export async function POST(req: Request) {
   try {
 
     const body = await req.json();
-    const { prompt, userEmail, userId } = body;
+    const {
+      prompt,
+      imageSize,
+      imageCount,
+      userEmail,
+      userId,
+    } = body;
+    const totalImages =
+  imageCount || 1;
+    let imageGenerationSize = "1024x1024";
+
+if (imageSize === "9:16") {
+  imageGenerationSize = "1024x1536";
+}
+
+if (imageSize === "16:9") {
+  imageGenerationSize = "1536x1024";
+}
     const safePrompt = prompt
   .replace(/kill/gi, "dramatic")
   .replace(/murder/gi, "cinematic")
@@ -45,8 +62,18 @@ export async function POST(req: Request) {
     });
 
     // STORYBOARD IMAGES
-    const image = await openai.images.generate({
+    const generatedImages = [];
+
+for (
+  let i = 0;
+  i < totalImages;
+  i++
+) {
+
+  const image =
+    await openai.images.generate({
       model: "gpt-image-1",
+
       prompt: `
 Ultra cinematic Hollywood movie scene,
 professional lighting,
@@ -57,16 +84,24 @@ safe for all audiences,
 no gore,
 no violence,
 no blood,
+Variation ${i + 1},
 ${safePrompt}
 `,
-      size: "auto",
+
+      size:
+        imageGenerationSize as any,
     });
-    
-    const base64 = image.data?.[0]?.b64_json;
 
-let imageUrl = "";
+  generatedImages.push(image);
+}
+let imageUrls: string[] = [];
 
-if (base64) {
+for (const img of generatedImages) {
+
+  const base64 =
+    img.data?.[0]?.b64_json;
+
+  if (!base64) continue;
 
   const buffer = Buffer.from(
     base64,
@@ -74,7 +109,7 @@ if (base64) {
   );
 
   const fileName =
-    `${Date.now()}.png`;
+    `${Date.now()}-${Math.random()}.png`;
 
   const { error: uploadError } =
     await supabaseAdmin.storage
@@ -89,6 +124,7 @@ if (base64) {
 
   if (uploadError) {
     console.log(uploadError);
+    continue;
   }
 
   const { data: publicUrlData } =
@@ -96,47 +132,54 @@ if (base64) {
       .from("generation-images")
       .getPublicUrl(fileName);
 
-  imageUrl =
-    publicUrlData.publicUrl;
-
-    console.log(
-  "IMAGE URL:",
-  imageUrl
-);
+  imageUrls.push(
+    publicUrlData.publicUrl
+  );
 }
 
-    const script = completion.choices[0].message.content;
 
+const script =
+  completion.choices[0].message.content;
 
-    const { data, error } = await supabaseAdmin
-  .from("generations")
-  .insert([
+const { data, error } =
+  await supabaseAdmin
+    .from("generations")
+    .insert([
       {
-        user_email: userEmail || "guest",
-        user_id: userId || null,
+        user_email:
+          userEmail || "guest",
+        user_id:
+          userId || null,
         prompt: prompt,
         script: script,
-        image: imageUrl,
+        image: imageUrls[0] || "",
       },
     ]);
 
-console.log("SUPABASE DATA:", data);
-console.log("SUPABASE ERROR:", error);
+console.log(
+  "SUPABASE DATA:",
+  data
+);
 
+console.log(
+  "SUPABASE ERROR:",
+  error
+);
 
 return Response.json({
   result: script,
-  images: [imageUrl],
+  images: imageUrls,
 });
 
-  } catch (error: any) {
 
-    console.log(error);
+} catch (error: any) {
 
-    return Response.json({
-      result: error.message,
-      images: [],
-    });
+  console.log(error);
+  
+  return Response.json({
+    result: error.message,
+    images: [],
+  });
 
-  }
+}
 }

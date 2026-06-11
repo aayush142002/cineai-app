@@ -64,7 +64,7 @@ export default function SettingsPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-black text-white p-10">
+    <main className="min-h-screen  text-white p-10">
 
       <div className="max-w-3xl mx-auto bg-white/5 border border-white/10 rounded-3xl p-8">
 

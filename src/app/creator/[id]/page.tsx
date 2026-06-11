@@ -77,7 +77,7 @@ const totalLikes =
 
 
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen text-white">
       <div className="max-w-6xl mx-auto px-6 py-20">
 
         {/* PROFILE CARD */}

@@ -55,7 +55,7 @@ console.log("USER INSERT ERROR:", insertError);
   }
 
   return (
-    <main className="min-h-screen bg-black text-white flex items-center justify-center px-6">
+    <main className="min-h-screen text-white flex items-center justify-center px-6">
 
       <div className="bg-white/5 border border-white/10 p-10 rounded-3xl w-full max-w-md backdrop-blur-xl">
 
