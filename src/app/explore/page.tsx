@@ -262,11 +262,10 @@ setLikes(likesMap);
     </p>
 
     <h3 className="text-4xl font-black">
-      {Object.values(likes).reduce(
-        (a: any, b: any) => a + b,
-        0
-      )}
-    </h3>
+  {Object.values(likes)
+    .map(Number)
+    .reduce((a, b) => a + b, 0)}
+</h3>
   </div>
 
 </div>
