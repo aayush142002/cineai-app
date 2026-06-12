@@ -11,6 +11,8 @@ export default function ExplorePage() {
   const [likes, setLikes] = useState<any>({});
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("latest");
+  const [topCreators, setTopCreators] =
+  useState<any[]>([]);
 
   async function loadCreations() {
 
@@ -60,8 +62,19 @@ export default function ExplorePage() {
   });
 
   setProfiles(profileMap);
-}
 
+const creatorsArray =
+  Object.values(profileMap);
+
+console.log(
+  "CREATORS ARRAY:",
+  creatorsArray
+);
+
+setTopCreators(
+  creatorsArray.slice(0, 5)
+);
+}
 
         async function loadLikes() {
 
@@ -170,22 +183,163 @@ setLikes(likesMap);
 
       <div className="max-w-7xl mx-auto">
 
-        <h1 className="text-6xl font-black mb-4">
-          Explore
-        </h1>
+      <h1 className="text-7xl md:text-8xl font-black mb-6">
+  Discover
+  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">
+    Cinematic Worlds
+  </span>
+</h1>
 
-        <p className="text-zinc-400 text-xl mb-12">
-          Discover creations from the CineAI community.
-        </p>
+<p className="text-zinc-400 text-2xl mb-16 max-w-3xl">
+  Explore stunning AI-generated stories,
+  characters and cinematic scenes created
+  by the StoryLens community.
+</p>
+<div
+  className="
+    relative
+    overflow-hidden
+    rounded-[32px]
+    border
+    border-purple-500/20
+    bg-gradient-to-br
+    from-purple-500/20
+    via-cyan-500/10
+    to-black
+    p-10
+    mb-12
+  "
+>
+
+  <div className="max-w-3xl">
+
+    <p className="text-purple-400 font-bold mb-3">
+      ✨ Featured Community
+    </p>
+
+    <h2 className="text-5xl font-black mb-4">
+      Explore The Most
+      <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">
+        Cinematic Creations
+      </span>
+    </h2>
+
+    <p className="text-zinc-300 text-lg">
+      Discover AI-generated stories,
+      characters and worlds created
+      by talented StoryLens creators.
+    </p>
+
+  </div>
+
+</div>
+
+<div className="grid md:grid-cols-3 gap-6 mb-12">
+
+  <div className="bg-white/5 border border-white/10 rounded-3xl p-6">
+    <p className="text-zinc-400">
+      Creations
+    </p>
+
+    <h3 className="text-4xl font-black">
+      {creations.length}
+    </h3>
+  </div>
+
+  <div className="bg-white/5 border border-white/10 rounded-3xl p-6">
+    <p className="text-zinc-400">
+      Creators
+    </p>
+
+    <h3 className="text-4xl font-black">
+      {Object.keys(profiles).length}
+    </h3>
+  </div>
+
+  <div className="bg-white/5 border border-white/10 rounded-3xl p-6">
+    <p className="text-zinc-400">
+      Likes
+    </p>
+
+    <h3 className="text-4xl font-black">
+      {Object.values(likes).reduce(
+        (a: any, b: any) => a + b,
+        0
+      )}
+    </h3>
+  </div>
+
+</div>
+
+<div className="mb-12">
+
+  <h2 className="text-3xl font-black mb-6">
+  🏆 Featured Creator
+  </h2>
+
+<div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+
+    {topCreators.map(
+      (creator, index) => (
+
+        <div
+        key={creator.user_id}
+        className="
+          bg-gradient-to-br
+          from-purple-500/20
+          to-cyan-500/10
+          border
+          border-purple-500/30
+          rounded-3xl
+          p-6
+          text-center
+          hover:scale-105
+          transition
+          duration-300
+        "
+      >
+
+          <div className="text-3xl mb-2">
+            {["🥇","🥈","🥉","⭐","⭐"][index]}
+          </div>
+
+          <h3
+  onClick={() => {
+    window.location.href =
+      `/creator/${creator.username}`;
+  }}
+  className="
+    font-bold
+    cursor-pointer
+    hover:text-purple-400
+  "
+>
+            {creator.display_name ||
+             creator.username}
+          </h3>
+
+          <p className="text-zinc-400 text-sm">
+            @{creator.username}
+          </p>
+
+        </div>
+
+      )
+    )}
+
+  </div>
+
+</div>
+
         <div className="flex gap-4 mb-10">
 
   <button
     onClick={() =>
       setActiveTab("latest")
     }
-    className={`px-6 py-3 rounded-2xl ${
+    className={`px-6 py-3 rounded-2xl font-semibold transition ${
       activeTab === "latest"
-        ? "bg-white text-black"
+        ? "bg-gradient-to-r from-purple-500 to-cyan-500 text-white"
         : "bg-white/5"
     }`}
   >
@@ -196,9 +350,9 @@ setLikes(likesMap);
     onClick={() =>
       setActiveTab("trending")
     }
-    className={`px-6 py-3 rounded-2xl ${
+    className={`px-6 py-3 rounded-2xl font-semibold transition ${
       activeTab === "trending"
-        ? "bg-white text-black"
+        ? "bg-gradient-to-r from-purple-500 to-cyan-500 text-white"
         : "bg-white/5"
     }`}
   >
@@ -209,7 +363,7 @@ setLikes(likesMap);
 
        {loading ? (
 
-  <div className="grid md:grid-cols-3 gap-8">
+<div className="grid md:grid-cols-3 gap-8">
 
     {[...Array(9)].map((_, i) => (
 
@@ -224,27 +378,82 @@ setLikes(likesMap);
 
 ) : (
 
-  <div className="grid md:grid-cols-3 gap-8">
+  <div className="columns-1 md:columns-3 gap-6 space-y-6">
 
     {displayedCreations.map((item) => (
 
-      <div
-        key={item.id}
-        onClick={() => {
-          setSelectedCreation(item);
-        }}
-        className="cursor-pointer rounded-3xl overflow-hidden hover:scale-[1.02] transition"
-      >
+<div
+key={item.id}
+onClick={() => {
+  setSelectedCreation(item);
+}}
+className="
+  cursor-pointer
+  rounded-3xl
+  overflow-hidden
+  mb-6
+  break-inside-avoid
+  bg-white/5
+  border
+  border-white/10
+  backdrop-blur-xl
+  hover:border-purple-500/30
+  hover:scale-[1.02]
+  transition
+  duration-500
+"
+>
 
-        {item.image && (
+<div className="relative">
 
-          <img
-            src={item.image}
-            alt={item.prompt}
-            className="w-full h-72 object-cover"
-          />
+<img
+  src={item.image}
+  alt={item.prompt}
+  className="
+    w-full
+    min-h-[280px]
+max-h-[520px]
+    object-cover
+    transition
+    duration-500
+    hover:scale-105
+  "
+/>
 
-        )}
+<div
+  className="
+    absolute
+    inset-0
+    bg-gradient-to-t
+    from-black/90
+    via-transparent
+    to-transparent
+  "
+/>
+
+<div
+  className="
+    absolute
+    bottom-0
+    left-0
+    right-0
+    p-4
+  "
+>
+
+  <p className="font-bold text-lg truncate">
+    {profiles[item.user_id]?.display_name ||
+     profiles[item.user_id]?.username ||
+     "Creator"}
+  </p>
+
+  <p className="text-sm text-zinc-300">
+    ❤️ {likes[item.id] || 0} Likes
+  </p>
+
+</div>
+
+</div>
 
       </div>
 
@@ -340,7 +549,7 @@ profiles[selectedCreation.user_id]
           <a
             href={selectedCreation.image}
             download
-            className="bg-white text-black px-6 py-3 rounded-2xl"
+            className="bg-gradient-to-r from-purple-500 to-cyan-500 text-white px-6 py-3 rounded-2xl"
           >
             Download
           </a>

@@ -14,6 +14,8 @@ export default function StudioPage() {
   const [video, setVideo] = useState("");
 const [videoLoading, setVideoLoading] = useState(false);
   const [images, setImages] = useState<any[]>([]);
+  const [selectedImage, setSelectedImage] =
+  useState("");
   const [loading, setLoading] = useState(false);
   const [generations, setGenerations] = useState<any[]>([]);
   const [user, setUser] = useState<any>(null);
@@ -367,68 +369,101 @@ async function loadNotificationCount() {
 
           <div className="flex flex-col md:flex-row gap-4">
 
-          <select
-  value={imageSize}
-  onChange={(e) =>
-    setImageSize(e.target.value)
-  }
-  className="
-    bg-[#101A2E]
-    border
-    border-cyan-500/20
-    rounded-2xl
-    px-4
-    py-5
-    text-white
-    font-medium
-    outline-none
-    focus:border-cyan-400
-    focus:ring-2
-    focus:ring-cyan-500/20
-    backdrop-blur-xl
-  "
->
-  <option value="1:1">
-    Square
-  </option>
+<div className="flex flex-col gap-2">
 
-  <option value="9:16">
-    Mobile Reel
-  </option>
+  <span className="text-sm text-zinc-400">
+    Aspect Ratio
+  </span>
 
-  <option value="16:9">
-    Cinematic Wide
-  </option>
-</select>
+  <div className="flex gap-2 flex-wrap">
 
-<select
-  value={imageCount}
-  onChange={(e) =>
-    setImageCount(Number(e.target.value))
-  }
-  className="
-    bg-[#101A2E]
-    border
-    border-cyan-500/20
-    rounded-2xl
-    px-4
-    py-5
-    text-white
-  "
->
-  <option value={1}>
-    1 Image
-  </option>
+    <button
+      type="button"
+      onClick={() => setImageSize("1:1")}
+      className={`px-4 py-3 rounded-xl transition ${
+        imageSize === "1:1"
+          ? "bg-cyan-500 text-black font-bold"
+          : "bg-white/5 border border-white/10"
+      }`}
+    >
+      Square
+    </button>
 
-  <option value={2}>
-    2 Images
-  </option>
+    <button
+      type="button"
+      onClick={() => setImageSize("9:16")}
+      className={`px-4 py-3 rounded-xl transition ${
+        imageSize === "9:16"
+          ? "bg-cyan-500 text-black font-bold"
+          : "bg-white/5 border border-white/10"
+      }`}
+    >
+      Mobile Reel
+    </button>
 
-  <option value={4}>
-    4 Images
-  </option>
-</select>
+    <button
+      type="button"
+      onClick={() => setImageSize("16:9")}
+      className={`px-4 py-3 rounded-xl transition ${
+        imageSize === "16:9"
+          ? "bg-cyan-500 text-black font-bold"
+          : "bg-white/5 border border-white/10"
+      }`}
+    >
+      Cinematic Wide
+    </button>
 
+  </div>
+
+</div>
+
+<div className="flex flex-col gap-2">
+
+  <span className="text-sm text-zinc-400">
+    Images
+  </span>
+
+  <div className="flex gap-2">
+
+    <button
+      type="button"
+      onClick={() => setImageCount(1)}
+      className={`w-14 py-3 rounded-xl transition ${
+        imageCount === 1
+          ? "bg-purple-500 text-white font-bold"
+          : "bg-white/5 border border-white/10"
+      }`}
+    >
+      1
+    </button>
+
+    <button
+      type="button"
+      onClick={() => setImageCount(2)}
+      className={`w-14 py-3 rounded-xl transition ${
+        imageCount === 2
+          ? "bg-purple-500 text-white font-bold"
+          : "bg-white/5 border border-white/10"
+      }`}
+    >
+      2
+    </button>
+
+    <button
+      type="button"
+      onClick={() => setImageCount(4)}
+      className={`w-14 py-3 rounded-xl transition ${
+        imageCount === 4
+          ? "bg-purple-500 text-white font-bold"
+          : "bg-white/5 border border-white/10"
+      }`}
+    >
+      4
+    </button>
+
+  </div>
+
+</div>
             <input
               type="text"
               placeholder="Describe a cinematic scene, character, world or story..."
@@ -505,7 +540,7 @@ async function loadNotificationCount() {
             </div>
 
             {/* STORYBOARD IMAGES */}
-            <div className="grid gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
               {Array.isArray(images) && images.map((img, index) => (
 
@@ -514,11 +549,21 @@ async function loadNotificationCount() {
                   className="bg-white/5 border border-white/10 rounded-3xl p-4 backdrop-blur-xl"
                 >
 
-                  <img
-                    src={img}
-                    alt={`Scene ${index + 1}`}
-                    className="rounded-2xl w-full"
-                  />
+<img
+  src={img}
+  alt={`Scene ${index + 1}`}
+  onClick={() => setSelectedImage(img)}
+  className="
+    rounded-2xl
+    w-full
+    aspect-square
+    object-cover
+    cursor-pointer
+    hover:scale-[1.03]
+    transition
+    duration-300
+  "
+/>
 
                 </div>
 
@@ -609,13 +654,21 @@ async function loadNotificationCount() {
         </p>
         <div className="flex flex-col md:flex-row gap-4">
 
-  <a
-    href={item.image}
-    download
-    className="bg-white text-black px-5 py-3 rounded-2xl font-semibold"
-  >
-    Download Image
-  </a>
+        <a
+  href={selectedImage}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="
+    bg-white
+    text-black
+    px-6
+    py-3
+    rounded-2xl
+    font-bold
+  "
+>
+  Open Full Resolution
+</a>
 
   <button
     onClick={() => {
@@ -692,7 +745,78 @@ async function loadNotificationCount() {
 </div>
 
 </div>
+{selectedImage && (
 
+<div
+  className="
+    fixed
+    inset-0
+    bg-black/90
+    z-[9999]
+    flex
+    items-center
+    justify-center
+    p-6
+  "
+  onClick={() => setSelectedImage("")}
+>
+
+  <div
+    className="relative max-w-6xl w-full"
+    onClick={(e) => e.stopPropagation()}
+  >
+
+    <button
+      onClick={() => setSelectedImage("")}
+      className="
+        absolute
+        top-4
+        right-4
+        bg-black/50
+        px-4
+        py-2
+        rounded-xl
+        text-white
+      "
+    >
+      ✕
+    </button>
+
+    <img
+      src={selectedImage}
+      alt="Preview"
+      className="
+        w-full
+        max-h-[85vh]
+        object-contain
+        rounded-3xl
+      "
+    />
+
+    <div className="flex justify-center mt-6">
+
+      <a
+        href={selectedImage}
+        download
+        className="
+          bg-white
+          text-black
+          px-6
+          py-3
+          rounded-2xl
+          font-bold
+        "
+      >
+        Download Image
+      </a>
+
+    </div>
+
+  </div>
+
+</div>
+
+)}
 
     </main>
   );
