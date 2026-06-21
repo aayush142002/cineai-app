@@ -33,7 +33,62 @@ export default function PricingPage() {
   
   }, []);
 
-
+  async function buyCredits(
+    amount: number
+  ) {
+  
+    const response =
+      await fetch(
+        "/api/create-order",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+          body: JSON.stringify({
+            amount,
+          }),
+        }
+      );
+  
+    const order =
+      await response.json();
+  
+    const options = {
+      key:
+        process.env
+          .NEXT_PUBLIC_RAZORPAY_KEY_ID,
+  
+      amount: order.amount,
+  
+      currency: order.currency,
+  
+      name: "StoryLens AI",
+  
+      description:
+        "Credit Purchase",
+  
+      order_id: order.id,
+  
+      handler: function (
+        response: any
+      ) {
+  
+        alert(
+          "Payment Successful!"
+        );
+  
+        console.log(response);
+      },
+    };
+  
+    const razorpay =
+      new (window as any)
+        .Razorpay(options);
+  
+    razorpay.open();
+  }
   return (
     <main className="min-h-screen text-white">
 
@@ -137,7 +192,9 @@ export default function PricingPage() {
             </p>
 
             <button
-              onClick={() => alert("Starter Pack - Coming Soon")}
+              onClick={() =>
+                buyCredits(99)
+              }
               className="w-full mt-8 py-4 rounded-2xl bg-white text-black font-bold"
             >
               Buy Credits
