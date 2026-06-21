@@ -1,6 +1,39 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+
 export default function PricingPage() {
+  const [credits, setCredits] =
+  useState(0);
+
+  useEffect(() => {
+
+    async function loadCredits() {
+  
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+  
+      if (!user?.email) return;
+  
+      const { data } =
+        await supabase
+          .from("users")
+          .select("credits")
+          .eq("email", user.email)
+          .single();
+  
+      setCredits(
+        data?.credits || 0
+      );
+    }
+  
+    loadCredits();
+  
+  }, []);
+
+
   return (
     <main className="min-h-screen text-white">
 
@@ -13,6 +46,21 @@ export default function PricingPage() {
         <p className="text-zinc-400 text-center mb-20 text-xl">
           Start free and purchase credits whenever you need more generations.
         </p>
+        <div className="max-w-md mx-auto mb-16">
+
+  <div className="bg-white/5 border border-white/10 rounded-3xl p-8 text-center">
+
+    <p className="text-zinc-400 mb-2">
+      Current Balance
+    </p>
+
+    <h2 className="text-5xl font-black">
+      ⭐ {credits}
+    </h2>
+
+  </div>
+
+</div>
 
         {/* FREE PLAN */}
 
@@ -77,19 +125,19 @@ export default function PricingPage() {
           <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
 
             <h3 className="text-3xl font-black">
-              Small Pack
+              Starter
             </h3>
 
             <p className="text-5xl font-black mt-4">
-              $5
+            ₹99
             </p>
 
             <p className="text-zinc-400 mt-2">
-              20 Credits
+            50 Credits
             </p>
 
             <button
-              onClick={() => alert("Small Pack - 20 Credits")}
+              onClick={() => alert("Starter Pack - Coming Soon")}
               className="w-full mt-8 py-4 rounded-2xl bg-white text-black font-bold"
             >
               Buy Credits
@@ -106,19 +154,19 @@ export default function PricingPage() {
             </div>
 
             <h3 className="text-3xl font-black">
-              Medium Pack
+              Creator
             </h3>
 
             <p className="text-5xl font-black mt-4">
-              $10
+            ₹249
             </p>
 
             <p className="text-zinc-400 mt-2">
-              50 Credits
+              200 Credits
             </p>
 
             <button
-              onClick={() => alert("Medium Pack - 50 Credits")}
+              onClick={() => alert("Creator Pack - Coming Soon")}
               className="w-full mt-8 py-4 rounded-2xl bg-green-500 font-bold"
             >
               Buy Credits
@@ -131,19 +179,19 @@ export default function PricingPage() {
           <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
 
             <h3 className="text-3xl font-black">
-              Large Pack
+              Pro
             </h3>
 
             <p className="text-5xl font-black mt-4">
-              $20
+            ₹699
             </p>
 
             <p className="text-zinc-400 mt-2">
-              120 Credits
+              600 Credits
             </p>
 
             <button
-              onClick={() => alert("Large Pack - 120 Credits")}
+              onClick={() => alert("Pro Pack - Coming Soon")}
               className="w-full mt-8 py-4 rounded-2xl bg-white text-black font-bold"
             >
               Buy Credits

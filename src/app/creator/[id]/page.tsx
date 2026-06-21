@@ -78,7 +78,53 @@ const totalLikes =
 
   return (
     <main className="min-h-screen text-white">
-      <div className="max-w-6xl mx-auto px-6 py-20">
+    <div
+  className="
+    h-[320px]
+    relative
+    overflow-hidden
+    bg-black
+  "
+>
+
+  <div
+    className="
+      absolute
+      w-[500px]
+      h-[500px]
+      bg-purple-500/30
+      blur-[120px]
+      -top-40
+      -left-20
+      rounded-full
+    "
+  />
+
+  <div
+    className="
+      absolute
+      w-[500px]
+      h-[500px]
+      bg-cyan-500/20
+      blur-[120px]
+      top-20
+      right-0
+      rounded-full
+    "
+  />
+
+  <div
+    className="
+      absolute
+      inset-0
+      bg-gradient-to-b
+      from-transparent
+      to-black
+    "
+  />
+
+</div>
+<div className="max-w-6xl mx-auto px-6 -mt-24 relative z-10">
 
         {/* PROFILE CARD */}
 
@@ -91,7 +137,7 @@ const totalLikes =
   {profile.avatar_url ? (
 
     <img
-      src={profile.avatar_url}
+    src={`${profile.avatar_url}?t=${Date.now()}`}
       alt={profile.display_name}
       className="w-full h-full object-cover"
     />
@@ -134,7 +180,14 @@ const totalLikes =
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
 
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-8 text-center">
+          <div className="bg-gradient-to-br
+from-white/10
+to-white/5
+border
+border-purple-500/20
+rounded-3xl
+p-8
+text-center">
 
             <h2 className="text-4xl font-black">
               {generationCount || 0}
@@ -146,7 +199,14 @@ const totalLikes =
 
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-8 text-center">
+          <div className="bg-gradient-to-br
+from-white/10
+to-white/5
+border
+border-purple-500/20
+rounded-3xl
+p-8
+text-center">
 
             <h2 className="text-4xl font-black">
               {followerCount || 0}
@@ -158,7 +218,14 @@ const totalLikes =
 
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-8 text-center">
+          <div className="bg-gradient-to-br
+from-white/10
+to-white/5
+border
+border-purple-500/20
+rounded-3xl
+p-8
+text-center">
 
             <h2 className="text-4xl font-black">
               {totalLikes}
@@ -186,7 +253,17 @@ const totalLikes =
 
     <div
       key={item.id}
-      className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden"
+      className="
+  bg-white/5
+  border
+  border-white/10
+  rounded-3xl
+  overflow-hidden
+  hover:scale-[1.03]
+  hover:border-purple-500/30
+  transition
+  duration-500
+"
     >
 
       <img

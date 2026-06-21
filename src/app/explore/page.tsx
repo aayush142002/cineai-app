@@ -298,6 +298,26 @@ setLikes(likesMap);
         "
       >
 
+<div className="flex justify-center mb-4">
+
+<img
+  src={
+    creator.avatar_url ||
+    "https://ui-avatars.com/api/?name=Creator"
+  }
+  alt="Avatar"
+  className="
+    w-20
+    h-20
+    rounded-full
+    object-cover
+    border-2
+    border-purple-500/40
+  "
+/>
+
+</div>
+
           <div className="text-3xl mb-2">
             {["🥇","🥈","🥉","⭐","⭐"][index]}
           </div>
