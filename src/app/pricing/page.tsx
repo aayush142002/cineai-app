@@ -34,7 +34,7 @@ export default function PricingPage() {
   }, []);
 
   async function buyCredits(
-    amount: number
+    plan: "starter" | "creator" | "pro"
   ) {
   
     const response =
@@ -47,7 +47,7 @@ export default function PricingPage() {
               "application/json",
           },
           body: JSON.stringify({
-            amount,
+            plan,
           }),
         }
       );
@@ -188,12 +188,12 @@ export default function PricingPage() {
             </p>
 
             <p className="text-zinc-400 mt-2">
-            50 Credits
+            150 Credits
             </p>
 
             <button
               onClick={() =>
-                buyCredits(99)
+                buyCredits("starter")
               }
               className="w-full mt-8 py-4 rounded-2xl bg-white text-black font-bold"
             >
@@ -219,11 +219,13 @@ export default function PricingPage() {
             </p>
 
             <p className="text-zinc-400 mt-2">
-              200 Credits
+              450 Credits
             </p>
 
             <button
-              onClick={() => alert("Creator Pack - Coming Soon")}
+              onClick={() =>
+                buyCredits("creator")
+              }
               className="w-full mt-8 py-4 rounded-2xl bg-green-500 font-bold"
             >
               Buy Credits
@@ -244,11 +246,13 @@ export default function PricingPage() {
             </p>
 
             <p className="text-zinc-400 mt-2">
-              600 Credits
+              1500 Credits
             </p>
 
             <button
-              onClick={() => alert("Pro Pack - Coming Soon")}
+              onClick={() =>
+                buyCredits("pro")
+              }
               className="w-full mt-8 py-4 rounded-2xl bg-white text-black font-bold"
             >
               Buy Credits

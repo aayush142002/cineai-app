@@ -8,9 +8,29 @@ const razorpay = new Razorpay({
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    const { plan } = await req.json();
 
-    const amount = body.amount;
+let amount = 0;
+
+switch (plan) {
+  case "starter":
+    amount = 99;
+    break;
+
+  case "creator":
+    amount = 249;
+    break;
+
+  case "pro":
+    amount = 699;
+    break;
+
+  default:
+    return NextResponse.json(
+      { error: "Invalid plan" },
+      { status: 400 }
+    );
+}
 
     const order = await razorpay.orders.create({
       amount: amount * 100,
