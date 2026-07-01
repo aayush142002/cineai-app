@@ -10,20 +10,20 @@ export default function PricingPage() {
   useEffect(() => {
 
     async function loadCredits() {
-  
+
       const {
         data: { user },
       } = await supabase.auth.getUser();
-  
-      if (!user?.email) return;
-  
+    
+      if (!user) return;
+    
       const { data } =
         await supabase
           .from("users")
           .select("credits")
-          .eq("email", user.email)
+          .eq("user_id", user.id)
           .single();
-  
+    
       setCredits(
         data?.credits || 0
       );

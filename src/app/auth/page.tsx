@@ -10,30 +10,51 @@ export default function AuthPage() {
 
   async function signUp() {
 
-    const { error } = await supabase.auth.signUp({
+    const {
+      data,
+      error,
+    } = await supabase.auth.signUp({
       email,
       password,
     });
-
+  
     if (error) {
-
+  
       alert(error.message);
-    
-    } else {
-      const { data, error: insertError } = await supabase
-  .from("users")
-  .insert([
-    {
-      email: email,
-    },
-  ]);
-
-console.log("USER INSERT:", data);
-console.log("USER INSERT ERROR:", insertError);
-    
-           window.location.href = "/studio";
-    
+      return;
+  
     }
+  
+    const user = data.user;
+  
+    if (!user) {
+  
+      alert(
+        "Please verify your email before continuing."
+      );
+      return;
+  
+    }
+  
+    const { error: insertError } =
+      await supabase
+        .from("users")
+        .insert([
+          {
+            user_id: user.id,
+            email: user.email,
+            credits: 15,
+          },
+        ]);
+  
+    if (insertError) {
+  
+      alert(insertError.message);
+      return;
+  
+    }
+  
+    window.location.href = "/studio";
   }
 
   async function login() {
